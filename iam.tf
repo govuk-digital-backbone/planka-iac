@@ -1,0 +1,69 @@
+# IAM roles and policies for ECS tasks
+
+## ECS Task Role
+
+resource "aws_iam_role" "ecs_task_role" {
+  name               = "${local.task_name}-task-role"
+  assume_role_policy = data.aws_iam_policy_document.ecs_task_assume.json
+}
+
+data "aws_iam_policy_document" "ecs_task_assume" {
+  statement {
+    effect = "Allow"
+    principals {
+      type        = "Service"
+      identifiers = ["ecs-tasks.amazonaws.com"]
+    }
+    actions = ["sts:AssumeRole"]
+  }
+}
+
+data "aws_efs_file_system" "by_id" {
+  file_system_id = var.efs_id
+}
+
+resource "aws_iam_role_policy" "efs_mount" {
+  name = "${local.task_name}-efs-mount-policy"
+  role = aws_iam_role.ecs_task_role.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "elasticfilesystem:ClientMount",
+          "elasticfilesystem:ClientWrite",
+          "elasticfilesystem:ClientRootAccess"
+        ]
+        Resource = [
+          data.aws_efs_file_system.by_id.arn,
+          "${data.aws_efs_file_system.by_id.arn}:access-point/*"
+        ]
+      }
+    ]
+  })
+}
+
+## ECS Task Execution Role
+
+resource "aws_iam_role" "ecs_task_execution" {
+  name               = "planka-${var.environment_name}-${var.planka_instance_id}-exec-role"
+  assume_role_policy = data.aws_iam_policy_document.ecs_execution_assume.json
+}
+
+data "aws_iam_policy_document" "ecs_execution_assume" {
+  statement {
+    effect = "Allow"
+    principals {
+      type        = "Service"
+      identifiers = ["ecs-tasks.amazonaws.com"]
+    }
+    actions = ["sts:AssumeRole"]
+  }
+}
+
+resource "aws_iam_role_policy_attachment" "ecs_exec_attach" {
+  role       = aws_iam_role.ecs_task_execution.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+}
