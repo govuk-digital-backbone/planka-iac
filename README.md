@@ -1,6 +1,6 @@
 # Planka Infrastructure as Code Module
 
-This module deploys a Planka application to an existing cluster (expected to be managed by the [terraform-ecs-module](https://github.com/govuk-digital-backbone/terraform-ecs-module)).
+This module deploys a Planka application to an existing Amazon Elastic Container Service cluster (expected to be managed by the [terraform-ecs-module](https://github.com/govuk-digital-backbone/terraform-ecs-module)).
 
 This modules is instantiated by the private `planka-instances` repository which provisions and manages instances.
 
