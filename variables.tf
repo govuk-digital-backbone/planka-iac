@@ -89,3 +89,9 @@ variable "desired_count" {
   type        = number
   default     = 1
 }
+
+variable "create_before_destroy" {
+  description = "Whether to create resources before destroying them"
+  type        = bool
+  default     = false
+}
