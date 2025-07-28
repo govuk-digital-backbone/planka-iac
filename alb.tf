@@ -36,7 +36,7 @@ resource "aws_lb_listener_rule" "alb_rule" {
   }
 
   lifecycle {
-    create_before_destroy = var.create_before_destroy
+    create_before_destroy = false
   }
 
   depends_on = [
@@ -53,7 +53,7 @@ resource "aws_lb_target_group" "alb_tg" {
 
   # Ensure listener rule is removed before TG
   lifecycle {
-    create_before_destroy = var.create_before_destroy
+    create_before_destroy = false
   }
 
   health_check {
