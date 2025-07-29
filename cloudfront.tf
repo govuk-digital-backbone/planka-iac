@@ -1,3 +1,11 @@
+data "aws_cloudfront_origin_request_policy" "origin" {
+  name = "Managed-AllViewerAndCloudFrontHeaders-2022-06"
+}
+
+data "aws_cloudfront_cache_policy" "cache" {
+  name = "UseOriginCacheControlHeaders-QueryStrings"
+}
+
 resource "aws_cloudfront_distribution" "this" {
   count = var.bootstrap_step >= 1 ? 1 : 0
 
@@ -23,26 +31,19 @@ resource "aws_cloudfront_distribution" "this" {
   default_cache_behavior {
     target_origin_id       = "alb-origin"
     viewer_protocol_policy = "redirect-to-https"
-    allowed_methods        = ["GET", "HEAD", "OPTIONS"]
-    cached_methods         = ["GET", "HEAD"]
+    allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
+    cached_methods   = ["GET", "HEAD"]
 
-    forwarded_values {
-      query_string = false
-      cookies {
-        forward = "none"
-      }
-    }
-
-    min_ttl     = 0
-    default_ttl = 3600
-    max_ttl     = 86400
+    origin_request_policy_id = data.aws_cloudfront_origin_request_policy.origin.id
+    cache_policy_id          = data.aws_cloudfront_cache_policy.cache.id    
 
     compress = true
   }
 
   restrictions {
     geo_restriction {
-      restriction_type = "none"
+      restriction_type = "none" # "whitelist"
+      # locations        = ["GB"]
     }
   }
 
