@@ -149,6 +149,9 @@ resource "aws_ecs_service" "ecs_service" {
   desired_count   = var.desired_count
   launch_type     = "FARGATE"
 
+  enable_execute_command = true
+  force_new_deployment   = true
+
   network_configuration {
     subnets         = data.aws_subnets.private_subnets.ids
     security_groups = [aws_security_group.ecs_service.id]
