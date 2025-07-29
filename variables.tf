@@ -89,3 +89,9 @@ variable "desired_count" {
   type        = number
   default     = 1
 }
+
+variable "planka_variables" {
+  description = "Additional environment variables for the Planka application"
+  type        = map(string)
+  default     = {}
+}

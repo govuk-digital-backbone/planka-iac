@@ -2,20 +2,6 @@ data "aws_ecs_cluster" "ecs_cluster" {
   cluster_name = var.cluster_name
 }
 
-resource "random_password" "admin_password" {
-  length  = 24
-  special = false
-  upper   = false
-
-  lifecycle {
-    ignore_changes = [
-      length,
-      special,
-      upper,
-    ]
-  }
-}
-
 resource "aws_ecs_task_definition" "ecs_task_definition" {
   family                   = local.task_name
   network_mode             = "awsvpc"
@@ -109,49 +95,9 @@ resource "aws_ecs_task_definition" "ecs_task_definition" {
       #}
 
       environment = [
-        {
-          name  = "BASE_URL"
-          value = "https://${var.planka_domain}"
-        },
-        {
-          name  = "DATABASE_URL"
-          value = local.connection_string
-        },
-        {
-          name  = "SECRET_KEY"
-          value = var.secret_key
-        },
-        {
-          name  = "LOG_LEVEL"
-          value = var.log_level
-        },
-        {
-          name  = "TRUST_PROXY"
-          value = "true"
-        },
-        {
-          name  = "TOKEN_EXPIRES_IN"
-          value = tostring(var.token_expires_in)
-        },
-        {
-          name  = "DEFAULT_LANGUAGE"
-          value = "en-GB"
-        },
-        {
-          name  = "DEFAULT_ADMIN_EMAIL"
-          value = "oliver.chalk@digital.cabinet-office.gov.uk"
-        },
-        {
-          name  = "DEFAULT_ADMIN_PASSWORD"
-          value = random_password.admin_password.result
-        },
-        {
-          name  = "DEFAULT_ADMIN_NAME"
-          value = "Oliver Chalk (Digital Cabinet Office)"
-        },
-        {
-          name  = "DEFAULT_ADMIN_USERNAME"
-          value = "oliverchalk_digitalcabinetoffice"
+        for k, v in local.planka_variables : {
+          name  = k
+          value = v
         }
       ]
 
