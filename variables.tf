@@ -96,3 +96,9 @@ variable "route53_zone_id" {
   type        = string
   default     = ""
 }
+
+variable "enable_execute_command" {
+  description = "Flag to enable ECS execute command feature"
+  type        = bool
+  default     = false
+}
