@@ -6,6 +6,22 @@ data "aws_cloudfront_cache_policy" "cache" {
   name = "UseOriginCacheControlHeaders-QueryStrings"
 }
 
+resource "random_password" "cloudfront_origin_header" {
+  length  = 16
+  special = false
+  upper   = false
+  numeric = false
+
+  lifecycle {
+    ignore_changes = [
+      length,
+      special,
+      upper,
+      numeric,
+    ]
+  }
+}
+
 resource "aws_cloudfront_distribution" "this" {
   count = var.bootstrap_step >= 1 ? 1 : 0
 
@@ -19,12 +35,18 @@ resource "aws_cloudfront_distribution" "this" {
       origin_protocol_policy = "https-only"
       origin_ssl_protocols   = ["TLSv1.2"]
     }
+
+    custom_header {
+      name  = "X-ALB-Protection"
+      value = random_password.cloudfront_origin_header.result
+    }
   }
 
   enabled             = true
   is_ipv6_enabled     = true
   comment             = var.planka_domain
   default_root_object = "index.html"
+  http_version        = "http2and3"
 
   aliases = var.bootstrap_step >= 3 ? [var.planka_domain] : []
 

@@ -9,6 +9,7 @@ resource "aws_lb_listener" "http" {
   protocol        = var.bootstrap_step >= 3 ? "HTTPS" : "HTTP"
   ssl_policy      = var.bootstrap_step >= 3 ? "ELBSecurityPolicy-TLS-1-2-2017-01" : null
   certificate_arn = var.bootstrap_step >= 3 ? aws_acm_certificate.planka_cert[0].arn : null
+  alpn_policy     = var.bootstrap_step >= 3 ? "HTTP2Preferred" : null
 
   default_action {
     type = "fixed-response"
@@ -32,6 +33,19 @@ resource "aws_lb_listener_rule" "alb_rule" {
   condition {
     path_pattern {
       values = ["/*"]
+    }
+  }
+
+  condition {
+    host_header {
+      values = [var.planka_domain]
+    }
+  }
+
+  condition {
+    http_header {
+      http_header_name = "X-ALB-Protection"
+      values           = [random_password.cloudfront_origin_header.result]
     }
   }
 
