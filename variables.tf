@@ -57,11 +57,6 @@ variable "token_expires_in" {
   default     = 1
 }
 
-variable "secret_key" {
-  description = "The secret key used by Planka for signing tokens"
-  type        = string
-}
-
 variable "image_tag" {
   description = "The tag of the Planka Docker image to use"
   type        = string

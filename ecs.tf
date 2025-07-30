@@ -3,6 +3,8 @@ data "aws_ecs_cluster" "ecs_cluster" {
 }
 
 resource "aws_ecs_task_definition" "ecs_task_definition" {
+  count = var.bootstrap_step >= 2 ? 1 : 0
+
   family                   = local.task_name
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
@@ -101,6 +103,17 @@ resource "aws_ecs_task_definition" "ecs_task_definition" {
         }
       ]
 
+      "secrets" : [
+        {
+          "name" : "DEFAULT_ADMIN_PASSWORD",
+          "valueFrom" : data.aws_ssm_parameter.planka-admin-password[0].arn
+        },
+        {
+          "name" : "OIDC_CLIENT_SECRET",
+          "valueFrom" : data.aws_ssm_parameter.planka-oidc-secret[0].arn
+        },
+      ]
+
       logConfiguration = {
         logDriver = "awslogs"
         options = {
@@ -143,9 +156,11 @@ resource "aws_ecs_task_definition" "ecs_task_definition" {
 }
 
 resource "aws_ecs_service" "ecs_service" {
+  count = var.bootstrap_step >= 2 ? 1 : 0
+
   name            = local.task_name
   cluster         = data.aws_ecs_cluster.ecs_cluster.arn
-  task_definition = aws_ecs_task_definition.ecs_task_definition.arn
+  task_definition = aws_ecs_task_definition.ecs_task_definition[0].arn
   desired_count   = var.desired_count
   launch_type     = "FARGATE"
 
@@ -164,6 +179,3 @@ resource "aws_ecs_service" "ecs_service" {
     container_port   = 1337
   }
 }
-
-
-
