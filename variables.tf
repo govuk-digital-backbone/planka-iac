@@ -90,3 +90,9 @@ variable "planka_variables" {
   type        = map(string)
   default     = {}
 }
+
+variable "route53_zone_id" {
+  description = "The ID of the Route53 hosted zone"
+  type        = string
+  default     = ""
+}

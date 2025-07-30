@@ -1,5 +1,5 @@
 output "route53_zone_name_servers" {
-  value = try(aws_route53_zone.zone[0].name_servers, [])
+  value = try(aws_route53_zone._zone[0].name_servers, [])
 }
 
 output "task_name" {

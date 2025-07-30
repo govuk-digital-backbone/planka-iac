@@ -1,5 +1,5 @@
-resource "aws_route53_zone" "zone" {
-  count = var.bootstrap_step >= 1 ? 1 : 0
+resource "aws_route53_zone" "_zone" {
+  count = var.bootstrap_step >= 1 && var.route53_zone_id == "" ? 1 : 0
   name  = var.planka_domain
 
   tags = {
@@ -7,10 +7,14 @@ resource "aws_route53_zone" "zone" {
   }
 }
 
+data "aws_route53_zone" "zone" {
+  zone_id = var.route53_zone_id != "" ? var.route53_zone_id : aws_route53_zone._zone[0].zone_id
+}
+
 resource "aws_route53_record" "alb" {
   count = var.bootstrap_step >= 1 ? 1 : 0
 
-  zone_id = aws_route53_zone.zone[0].zone_id
+  zone_id = data.aws_route53_zone.zone.zone_id
   name    = "alb.${var.planka_domain}"
   type    = "CNAME"
   ttl     = 300
@@ -21,7 +25,7 @@ resource "aws_route53_record" "alb" {
 resource "aws_route53_record" "planka_a" {
   count = var.bootstrap_step >= 3 ? 1 : 0
 
-  zone_id = aws_route53_zone.zone[0].zone_id
+  zone_id = data.aws_route53_zone.zone.zone_id
   name    = var.planka_domain
   type    = "A"
 
@@ -35,7 +39,7 @@ resource "aws_route53_record" "planka_a" {
 resource "aws_route53_record" "planka_aaaa" {
   count = var.bootstrap_step >= 3 ? 1 : 0
 
-  zone_id = aws_route53_zone.zone[0].zone_id
+  zone_id = data.aws_route53_zone.zone.zone_id
   name    = var.planka_domain
   type    = "AAAA"
 

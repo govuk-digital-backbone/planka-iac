@@ -24,7 +24,7 @@ resource "aws_route53_record" "alb_validation" {
   records         = [each.value.record]
   ttl             = 60
   type            = each.value.type
-  zone_id         = aws_route53_zone.zone[0].zone_id
+  zone_id         = data.aws_route53_zone.zone.zone_id
 }
 
 ### --- CloudFront Certificate ---
@@ -57,5 +57,5 @@ resource "aws_route53_record" "cloudfront_validation" {
   records         = [each.value.record]
   ttl             = 60
   type            = each.value.type
-  zone_id         = aws_route53_zone.zone[0].zone_id
+  zone_id         = data.aws_route53_zone.zone.zone_id
 }
