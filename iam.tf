@@ -100,10 +100,3 @@ resource "aws_iam_role_policy" "ecs_exec_custom" {
     ]
   })
 }
-
-resource "aws_iam_role_policy_attachment" "ecs_task_execution_custom_attach" {
-  count = var.bootstrap_step >= 2 ? 1 : 0
-  
-  role       = aws_iam_role.ecs_task_execution.name
-  policy_arn = aws_iam_role_policy.ecs_exec_custom[0].arn
-}
