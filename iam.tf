@@ -79,6 +79,8 @@ resource "aws_iam_role_policy_attachment" "ecs_exec_attach" {
 }
 
 resource "aws_iam_role_policy" "ecs_exec_custom" {
+  count = var.bootstrap_step >= 2 ? 1 : 0
+
   name = "${local.task_name}-exec-policy"
   role = aws_iam_role.ecs_task_execution.id
 
@@ -91,8 +93,8 @@ resource "aws_iam_role_policy" "ecs_exec_custom" {
           "ssm:GetParameters"
         ],
         Resource = [
-          data.aws_ssm_parameter.planka-admin-password.arn,
-          data.aws_ssm_parameter.planka-oidc-secret.arn
+          data.aws_ssm_parameter.planka-admin-password[0].arn,
+          data.aws_ssm_parameter.planka-oidc-secret[0].arn
         ]
       }
     ]
@@ -100,6 +102,8 @@ resource "aws_iam_role_policy" "ecs_exec_custom" {
 }
 
 resource "aws_iam_role_policy_attachment" "ecs_task_execution_custom_attach" {
+  count = var.bootstrap_step >= 2 ? 1 : 0
+  
   role       = aws_iam_role.ecs_task_execution.name
-  policy_arn = aws_iam_role_policy.ecs_exec_custom.arn
+  policy_arn = aws_iam_role_policy.ecs_exec_custom[0].arn
 }
