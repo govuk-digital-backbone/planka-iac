@@ -91,8 +91,8 @@ resource "aws_iam_role_policy" "ecs_exec_custom" {
           "ssm:GetParameters"
         ],
         Resource = [
-          data.aws_ssm_parameter.planka_admin_password.arn,
-          data.aws_ssm_parameter.planka_oidc_secret.arn
+          data.aws_ssm_parameter.planka-admin-password.arn,
+          data.aws_ssm_parameter.planka-oidc-secret.arn
         ]
       }
     ]
