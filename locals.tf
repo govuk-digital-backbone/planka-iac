@@ -1,5 +1,5 @@
 locals {
-  task_name          = "planka-${var.environment_name}-${var.planka_instance_id}"
+  task_name          = "planka-${var.planka_instance_id}"
   ssm_key_prefix     = "/planka/${var.environment_name}/${var.planka_instance_id}"
   ssm_admin_password = "${local.ssm_key_prefix}/admin_password"
   ssm_oidc_secret    = "${local.ssm_key_prefix}/oidc_secret"
