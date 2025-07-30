@@ -9,7 +9,6 @@ resource "aws_lb_listener" "http" {
   protocol        = var.bootstrap_step >= 3 ? "HTTPS" : "HTTP"
   ssl_policy      = var.bootstrap_step >= 3 ? "ELBSecurityPolicy-TLS-1-2-2017-01" : null
   certificate_arn = var.bootstrap_step >= 3 ? aws_acm_certificate.planka_cert[0].arn : null
-  alpn_policy     = var.bootstrap_step >= 3 ? "HTTP2Preferred" : null
 
   default_action {
     type = "fixed-response"
