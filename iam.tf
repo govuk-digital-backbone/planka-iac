@@ -77,3 +77,29 @@ resource "aws_iam_role_policy_attachment" "ecs_exec_attach" {
   role       = aws_iam_role.ecs_task_execution.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
+
+resource "aws_iam_role_policy" "ecs_exec_custom" {
+  name = "${local.task_name}-exec-policy"
+  role = aws_iam_role.ecs_task_execution.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow",
+        Action = [
+          "ssm:GetParameters"
+        ],
+        Resource = [
+          data.aws_ssm_parameter.planka_admin_password.arn,
+          data.aws_ssm_parameter.planka_oidc_secret.arn
+        ]
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "ecs_task_execution_custom_attach" {
+  role       = aws_iam_role.ecs_task_execution.name
+  policy_arn = aws_iam_role_policy.ecs_exec_custom.arn
+}
