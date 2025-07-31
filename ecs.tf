@@ -151,6 +151,27 @@ resource "aws_ecs_task_definition" "ecs_task_definition" {
           readOnly      = false
         }
       ]
+    },
+    {
+      name  = "${local.task_name}-smtp"
+      image = "ghcr.io/govuk-digital-backbone/govuk-notify-smtp-relay:latest"
+      portMappings = [
+        {
+          containerPort = 2525
+          hostPort      = 2525
+        }
+      ]
+
+      "secrets" : [
+        {
+          "name" : "NOTIFY_API_KEY",
+          "valueFrom" : data.aws_ssm_parameter.planka-notify-api-key[0].arn
+        },
+        {
+          "name" : "NOTIFY_TEMPLATE_ID",
+          "valueFrom" : data.aws_ssm_parameter.planka-notify-template-id[0].arn
+        }
+      ]
     }
   ])
 }
