@@ -118,7 +118,7 @@ resource "aws_ecs_task_definition" "ecs_task_definition" {
         logDriver = "awslogs"
         options = {
           awslogs-create-group  = "true" # creates log group if it doesn't exist
-          awslogs-group         = aws_cloudwatch_log_group.this.name
+          awslogs-group         = aws_cloudwatch_log_group.planka.name
           awslogs-region        = "eu-west-2"
           awslogs-stream-prefix = "ecs" # shows up as task_name/<container>/<task-id>
         }
@@ -161,6 +161,16 @@ resource "aws_ecs_task_definition" "ecs_task_definition" {
           hostPort      = 2525
         }
       ]
+
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          awslogs-create-group  = "true" # creates log group if it doesn't exist
+          awslogs-group         = aws_cloudwatch_log_group.smtp.name
+          awslogs-region        = "eu-west-2"
+          awslogs-stream-prefix = "ecs" # shows up as task_name/<container>/<task-id>
+        }
+      }
 
       "secrets" : [
         {
