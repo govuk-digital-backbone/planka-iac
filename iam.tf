@@ -95,6 +95,8 @@ resource "aws_iam_role_policy" "ecs_exec_custom" {
         Resource = [
           data.aws_ssm_parameter.planka-admin-password[0].arn,
           data.aws_ssm_parameter.planka-oidc-secret[0].arn
+          data.aws_ssm_parameter.planka-notify-api-key[0].arn,
+          data.aws_ssm_parameter.planka-notify-template-id[0].arn
         ]
       }
     ]
