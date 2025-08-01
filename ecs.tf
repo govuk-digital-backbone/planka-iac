@@ -82,7 +82,7 @@ resource "aws_ecs_task_definition" "ecs_task_definition" {
   container_definitions = jsonencode([
     {
       name  = local.task_name
-      image = "ghcr.io/plankanban/planka:${var.image_tag}"
+      image = "${var.image}:${var.image_tag}"
       portMappings = [
         {
           containerPort = 1337

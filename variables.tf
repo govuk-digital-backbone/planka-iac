@@ -57,6 +57,12 @@ variable "token_expires_in" {
   default     = 1
 }
 
+variable "image" {
+  description = "The base Docker image for the Planka application"
+  type        = string
+  default     = "ghcr.io/plankanban/planka"
+}
+
 variable "image_tag" {
   description = "The tag of the Planka Docker image to use"
   type        = string

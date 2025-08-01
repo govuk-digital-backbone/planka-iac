@@ -1,0 +1,31 @@
+name: GHCR Deploy
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - docker/**
+  workflow_dispatch:
+
+permissions: write-all
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout this repo
+        uses: actions/checkout@v4
+
+      - name: 'Login to GitHub Container Registry'
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 'Build Inventory Image'
+        run: |
+          cd docker
+          docker build . --tag ghcr.io/govuk-digital-backbone/planka:2.0.0-rc.3
+          docker push ghcr.io/govuk-digital-backbone/planka:2.0.0-rc.3
