@@ -9,6 +9,11 @@ locals {
 
   log_retention_days = var.environment_name == "production" ? 365 : 14
 
+  cloudfront_acm_required = (
+    var.bootstrap_step >= 2 &&
+    !endswith(var.planka_domain, ".cloudfront.net")
+  ) ? true : false
+
   database_username = sensitive(random_password.sql_master_username.result)
   database_password = sensitive(random_password.sql_master_password.result)
   database_name     = sensitive("db${random_password.sql_database_name.result}")
