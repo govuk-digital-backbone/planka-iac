@@ -2,14 +2,18 @@ FROM ghcr.io/plankanban/planka:2.0.0-rc.3
 
 WORKDIR /app
 
-RUN sed -i 's|<title>PLANKA</title>|<title>PLANKA by GDS</title>|' public/index.html
-RUN sed -i 's/#21212180/none/g' public/assets/index-*.css
-RUN sed -i 's/Powered by PLANKA/Powered by PLANKA, managed by GDS/g' public/assets/index-*.js
+RUN sed -i 's|<title>PLANKA</title>|<title>PLANKA by GDS</title>|' /app/public/index.html
+RUN sed -i 's/#21212180/none/g' /app/public/assets/index-*.css
+RUN sed -i 's/Powered by PLANKA/Powered by PLANKA, managed by GDS/g' /app/public/assets/index-*.js
 
 COPY gds-dsit-gdad-cover.jpg /tmp/gds-dsit-gdad-cover.jpg
+
 RUN for f in /app/public/assets/cover-*.jpg; do \
       cp /tmp/gds-dsit-gdad-cover.jpg "$f"; \
     done
+
+RUN ls -lahR /app/public/
+RUN cat /app/public/index.html
 
 VOLUME /app/public/favicons
 VOLUME /app/public/user-avatars
