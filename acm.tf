@@ -31,7 +31,7 @@ resource "aws_route53_record" "alb_validation" {
 # This will need to be created in the us-east-1 region for CloudFront
 
 resource "aws_acm_certificate" "cloudfront_cert" {
-  count             = local.cloudfront_acm_required ? 1 : 0
+  count             = var.bootstrap_step >= 2 ? 1 : 0
   domain_name       = var.planka_domain
   validation_method = "DNS"
 
@@ -45,7 +45,7 @@ resource "aws_acm_certificate" "cloudfront_cert" {
 
 resource "aws_route53_record" "cloudfront_validation" {
   for_each = {
-    for dvo in(local.cloudfront_acm_required ? aws_acm_certificate.cloudfront_cert[0].domain_validation_options : []) : dvo.domain_name => {
+    for dvo in(var.bootstrap_step >= 2 ? aws_acm_certificate.cloudfront_cert[0].domain_validation_options : []) : dvo.domain_name => {
       name   = dvo.resource_record_name
       record = dvo.resource_record_value
       type   = dvo.resource_record_type
