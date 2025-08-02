@@ -19,4 +19,4 @@ EXPOSE 1337
 HEALTHCHECK --interval=10s --timeout=2s --start-period=15s \
   CMD node ./healthcheck.js
 
-CMD ["/app/pre-run.sh && /app/start.sh"]
+CMD /app/pre-run.sh && /app/start.sh
