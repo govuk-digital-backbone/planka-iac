@@ -3,11 +3,8 @@ FROM ghcr.io/plankanban/planka:2.0.0-rc.3
 WORKDIR /app
 
 COPY custom.css /app/public/assets/custom.css
+COPY gds-dsit-gdad-cover.jpg /app/public/assets/gds-dsit-gdad-cover.jpg
 COPY pre-run.sh /app/pre-run.sh
-COPY gds-dsit-gdad-cover.jpg /tmp/gds-dsit-gdad-cover.jpg
-RUN for f in /app/public/assets/cover-*.jpg; do \
-      cp /tmp/gds-dsit-gdad-cover.jpg "$f"; \
-    done
 
 VOLUME /app/public/favicons
 VOLUME /app/public/user-avatars

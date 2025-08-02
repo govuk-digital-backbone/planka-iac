@@ -1,5 +1,9 @@
 /* Custom styles for PLANKA by GDS, variables set in the pre-run.sh */
 
+#app div[class*="_cover"] {
+    background: url(/assets/gds-dsit-gdad-cover.jpg?v=1) left/cover !important;
+}
+
 div[class^="_coverOverlay"] {
   background: none !important;
 }
