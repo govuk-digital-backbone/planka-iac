@@ -1,0 +1,5 @@
+/* Custom styles for PLANKA by GDS */
+
+div [class^="_coverOverlay"] {
+  background: none !important;
+}
