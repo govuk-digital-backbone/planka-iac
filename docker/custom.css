@@ -4,17 +4,13 @@ div[class^="_coverOverlay"] {
   background: none !important;
 }
 
-p[class*="_formFooter"] {
-    display: none !important;
-}
-
 h1[class*="_formTitle"] {
   font-size: 0 !important;
   text-transform: none !important;
 }
 
 h1[class*="_formTitle"]::before {
-  content: "LOGIN_TAG";
+  content: "CUSTOM_LOGIN_TAG";
   display: inline-block;
   color: #0c2d4a;
   background-color: #bbd4ea;
@@ -26,7 +22,7 @@ h1[class*="_formTitle"]::before {
 }
 
 h1[class*="_formTitle"]::after {
-  content: "LOGIN_TITLE";
+  content: "CUSTOM_LOGIN_TITLE";
   font-size: 20px;
   white-space: pre;
   display: block;
@@ -46,6 +42,6 @@ a[class*="_logo"][class*="_title"] {
 }
 
 a[class*="_logo"][class*="_title"]::before {
-  content: "APP_TITLE";
+  content: "CUSTOM_APP_TITLE";
   font-size: 20px;
 }
