@@ -3,12 +3,14 @@ FROM ghcr.io/plankanban/planka:2.0.0-rc.3
 WORKDIR /app
 
 COPY custom.css /app/public/assets/custom.css
+COPY custom.js /app/public/assets/custom.js
+COPY custom.json /app/public/assets/custom.json
 
 RUN sed -i 's|<title>PLANKA</title>|<title>PLANKA by GDS</title>|' /app/public/index.html
 RUN sed -i 's|<title>PLANKA</title>|<title>PLANKA by GDS</title>|' /app/views/index.html
 
-RUN sed -i 's| </head>|<link rel="stylesheet" crossorigin href="/assets/custom.css"></head>|' /app/public/index.html
-RUN sed -i 's| </head>|<link rel="stylesheet" crossorigin href="/assets/custom.css"></head>|' /app/views/index.html
+RUN sed -i 's| </head>|<link rel="stylesheet" crossorigin href="/assets/custom.css"><script src="/assets/custom.js"></script></head>|' /app/public/index.html
+RUN sed -i 's| </head>|<link rel="stylesheet" crossorigin href="/assets/custom.css"><script src="/assets/custom.js"></script></head>|' /app/views/index.html
 
 COPY gds-dsit-gdad-cover.jpg /tmp/gds-dsit-gdad-cover.jpg
 

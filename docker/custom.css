@@ -1,5 +1,13 @@
 /* Custom styles for PLANKA by GDS */
 
-div [class^="_coverOverlay"] {
+div[class^="_coverOverlay"] {
   background: none !important;
+}
+
+p[class*="_formFooter"] {
+    display: none !important;
+}
+
+h2[class*="_formSubtitle"] {
+    display: none !important;
 }
