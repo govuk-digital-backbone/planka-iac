@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+# patch index.html and custom.css with environment variables
+# if bak files don't exist, create them - this ensures that
+# any environment variable changes will be reflected in the patched files
+
+if [ ! -f /app/public/index.html.bak ]; then
+    cp /app/public/index.html /app/public/index.html.bak
+    cp /app/views/index.html /app/views/index.html.bak
+else
+    cp /app/public/index.html.bak /app/public/index.html
+    cp /app/views/index.html.bak /app/views/index.html
+fi
+
+if [ -z "$CUSTOM_TITLE" ]; then
+    CUSTOM_TITLE="PLANKA by GDS"
+fi
+sed -i "s%<title>PLANKA</title>%<title>$CUSTOM_TITLE</title>%" /app/public/index.html
+sed -i "s%<title>PLANKA</title>%<title>$CUSTOM_TITLE</title>%" /app/views/index.html
+
+VERSION_TIMESTAMP=$(date +%s)
+sed -i "s| </head>|<link rel=\"stylesheet\" crossorigin href=\"/assets/custom.css?v=$VERSION_TIMESTAMP\"></head>|" /app/public/index.html
+sed -i "s| </head>|<link rel=\"stylesheet\" crossorigin href=\"/assets/custom.css?v=$VERSION_TIMESTAMP\"></head>|" /app/views/index.html
+
+
+if [ ! -f /app/public/assets/custom.css.bak ]; then
+    cp /app/public/assets/custom.css /app/public/assets/custom.css.bak
+else
+    cp /app/public/assets/custom.css.bak /app/public/assets/custom.css
+fi
+
+if [ -z "$CUSTOM_LOGIN_TAG" ]; then
+    CUSTOM_LOGIN_TAG=""
+fi
+sed -i "s%LOGIN_TAG%$CUSTOM_LOGIN_TAG%" /app/public/assets/custom.css
+
+if [ -z "$CUSTOM_LOGIN_TITLE" ]; then
+    CUSTOM_LOGIN_TITLE="PLANKA"
+fi
+sed -i "s%LOGIN_TITLE%$CUSTOM_LOGIN_TITLE%" /app/public/assets/custom.css
+
+if [ -z "$CUSTOM_APP_TITLE" ]; then
+    CUSTOM_APP_TITLE="PLANKA"
+fi
+sed -i "s%APP_TITLE%$CUSTOM_APP_TITLE%" /app/public/assets/custom.css
