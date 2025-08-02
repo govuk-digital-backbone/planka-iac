@@ -1,4 +1,4 @@
-const customJSONResponse = await fetch('./custom.json');
+const customJSONResponse = await fetch('/assets/custom.json');
 const customJSON = await customJSONResponse.json();
 
 document.addEventListener("DOMContentLoaded", () => {
