@@ -7,7 +7,7 @@ data "aws_cloudfront_cache_policy" "cache" {
 }
 
 data "aws_cloudfront_cache_policy" "disabled" {
-  name = "CachingDisabled"
+  name = "Managed-CachingDisabled"
 }
 
 resource "random_password" "cloudfront_origin_header" {
