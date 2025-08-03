@@ -6,6 +6,10 @@ data "aws_cloudfront_cache_policy" "cache" {
   name = "UseOriginCacheControlHeaders-QueryStrings"
 }
 
+data "aws_cloudfront_cache_policy" "disabled" {
+  name = "CachingDisabled"
+}
+
 resource "random_password" "cloudfront_origin_header" {
   length  = 16
   special = false
@@ -57,7 +61,7 @@ resource "aws_cloudfront_distribution" "this" {
     cached_methods         = ["GET", "HEAD"]
 
     origin_request_policy_id = data.aws_cloudfront_origin_request_policy.origin.id
-    cache_policy_id          = data.aws_cloudfront_cache_policy.cache.id
+    cache_policy_id          = data.aws_cloudfront_cache_policy.disabled.id
 
     compress = true
   }
