@@ -27,5 +27,5 @@ jobs:
       - name: 'Build Inventory Image'
         run: |
           cd docker
-          docker build . --tag ghcr.io/govuk-digital-backbone/planka:2.0.0-rc.3
+          docker build . --no-cache --tag ghcr.io/govuk-digital-backbone/planka:2.0.0-rc.3
           docker push ghcr.io/govuk-digital-backbone/planka:2.0.0-rc.3
