@@ -3,6 +3,7 @@ FROM ghcr.io/plankanban/planka:2.0.0-rc.3
 WORKDIR /app
 
 COPY custom.css /app/public/assets/custom.css
+COPY custom.js /app/public/assets/custom.js
 COPY gds-dsit-gdad-cover.jpg /app/public/assets/gds-dsit-gdad-cover.jpg
 COPY pre-run.sh /app/pre-run.sh
 

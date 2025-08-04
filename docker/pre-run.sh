@@ -25,6 +25,8 @@ VERSION_TIMESTAMP=$(date +%s)
 echo "pre-run.sh: Setting version timestamp to: $VERSION_TIMESTAMP"
 sed -i "s| </head>|<link rel=\"stylesheet\" crossorigin href=\"/assets/custom.css?v=$VERSION_TIMESTAMP\"></head>|" /app/public/index.html
 sed -i "s| </head>|<link rel=\"stylesheet\" crossorigin href=\"/assets/custom.css?v=$VERSION_TIMESTAMP\"></head>|" /app/views/index.html
+sed -i "s| </body>|<script src=\"/assets/custom.js?v=$VERSION_TIMESTAMP\"></script></body>|" /app/public/index.html
+sed -i "s| </body>|<script src=\"/assets/custom.js?v=$VERSION_TIMESTAMP\"></script></body>|" /app/views/index.html
 
 
 if [ ! -f /app/public/assets/custom.css.bak ]; then
